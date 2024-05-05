@@ -7,13 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma": "dotenv -e .env.local -- prisma"
+    "prisma": "prisma"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.567.0",
     "@prisma/client": "^5.13.0",
     "adm-zip": "^0.5.12",
     "next": "14.2.3",
+    "original-fs": "^1.2.0",
     "react": "^18",
     "react-dom": "^18",
     "semver": "^7.6.0",
