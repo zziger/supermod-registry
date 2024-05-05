@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  TRUSTED
+  ADMIN
+}
+
+model User {
+  id    Int    @id @default(autoincrement())
+  name  String?
+  discord String?
+  role  Role   @default(USER)
+
+  tokens Token[]
+  mods Mod[]
+}
+
+model Token {
+  id   Int    @id @default(autoincrement())
+  token String @unique
+  userId Int
+
+  createdAt DateTime @default(now())
+  expiresAt DateTime?
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Mod {
+  id    String    @id
+  uploaderId Int
+  latestVersionValue String?
+
+  uploader User @relation(fields: [uploaderId], references: [id])
+  versions ModVersion[]
+  latestVersion ModVersion? @relation("latestVersion", fields: [id, latestVersionValue], references: [modId, version])
+
+  @@unique([id, latestVersionValue])
+}
+
+model ModDependency {
+  id Int @id @default(autoincrement())
+
+  modId String
+  modVersionValue String
+
+  dependencyId String
+  dependencyName String
+  dependencyVersionRange String
+
+  modVersion ModVersion @relation(fields: [modId, modVersionValue], references: [modId, version])
+}
+
+model ModVersion {
+  modId String
+  version String
+  prerelease Boolean @default(false)
+  title String?
+  author String?
+  description String?
+  sdkVersion String?
+  gameVersions Int[] @default([])
+  verified Boolean @default(false)
+
+  cdnContentPath String
+  cdnIconPath String?
+
+  mod Mod @relation(fields: [modId], references: [id])
+  latestVersionOfMod Mod? @relation("latestVersion")
+  dependencies ModDependency[]
+
+  @@id(name: "id", [modId, version])
+}
