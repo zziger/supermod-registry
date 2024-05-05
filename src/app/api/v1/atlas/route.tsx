@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import {ImageResponse} from "next/og";
 import {env} from "@/lib/env.mjs";
 
+export const dynamic = 'force-dynamic';
 let cacheUpdate = 0;
 let cache: any | null = null;
 
