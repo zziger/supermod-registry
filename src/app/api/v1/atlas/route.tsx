@@ -25,6 +25,17 @@ export async function GET() {
         }
     });
 
+    if (!mods.length) {
+        return {
+            icons: [],
+            image: {
+                width: 1,
+                height: 1,
+                data: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=', // 1x1 transparent pixel
+            }
+        }
+    }
+
     // Placing 128x128 elements on an atlas, with 10 elements max in width
     const iconSize = 128;
     const maxElementsX = 10;
