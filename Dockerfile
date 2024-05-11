@@ -34,6 +34,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --chown=nextjs:nodejs prisma ./prisma/
 COPY --chown=nextjs:nodejs docker-bootstrap.sh ./
+RUN chmod +x docker-bootstrap.sh
 
 USER nextjs
 EXPOSE 3000
