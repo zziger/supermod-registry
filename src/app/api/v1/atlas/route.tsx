@@ -9,7 +9,7 @@ let cache: any | null = null;
 
 const cacheRevalidateInterval = process.env.NODE_ENV == 'production' ? 60000 : 0;
 
-export async function GET() {
+export async function GET(): Promise<Response> {
     if (cache && Date.now() - cacheUpdate < cacheRevalidateInterval) {
         return Response.json(cache);
     }
@@ -26,14 +26,14 @@ export async function GET() {
     });
 
     if (!mods.length) {
-        return {
+        return Response.json({
             icons: [],
             image: {
                 width: 1,
                 height: 1,
                 data: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=', // 1x1 transparent pixel
             }
-        }
+        });
     }
 
     // Placing 128x128 elements on an atlas, with 10 elements max in width
