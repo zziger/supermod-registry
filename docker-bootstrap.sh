@@ -1,3 +1,3 @@
 #!/bin/sh
-yarn prisma migrate deploy
+npx -y prisma migrate deploy
 node server.js
