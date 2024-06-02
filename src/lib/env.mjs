@@ -9,6 +9,9 @@ const envSchema = z.object({
     R2_SECRET_ACCESS_KEY: z.string(),
     R2_BUCKET: z.string(),
     CDN_URL: z.string(),
+    DISCORD_CLIENT_SECRET: z.string(),
+    DISCORD_CLIENT_ID: z.string(),
+    PUBLIC_API_URL: z.string(),
 });
 
 export const env = envSchema.parse(process.env);
