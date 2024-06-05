@@ -3,5 +3,5 @@ import {env} from "@/lib/env.mjs";
 
 export async function POST() {
     const request = createAuthRequest();
-    return getDiscordRedirectData(request);
+    return Response.json(getDiscordRedirectData(request));
 }
