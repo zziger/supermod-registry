@@ -47,7 +47,7 @@ export async function POST(request: Request) {
         return new Response(null, { status: 409 });
     }
 
-    const cdnRootPath = `/mods/${modId}/${parsedData.version}`;
+    const cdnRootPath = `mods/${modId}/${parsedData.version}`;
     const cdnContentPath = `${cdnRootPath}/content.zip`;
     let cdnIconPath: string | null = null;
 
