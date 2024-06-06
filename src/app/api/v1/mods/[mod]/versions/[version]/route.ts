@@ -19,8 +19,7 @@ export async function GET(request: Request, { params }: { params: { mod: string,
     const showUnverified = user && (user.role === 'ADMIN' || user.id === mod.uploaderId);
     if (!showUnverified && !version.verified) return new Response(null, {status: 404});
 
-    prepareModVersion(version);
-    return Response.json(version);
+    return Response.json(prepareModVersion(version));
 }
 
 export async function DELETE(request: Request, { params }: { params: { mod: string, version: string }}) {

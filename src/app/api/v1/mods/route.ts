@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import {authorize} from "@/lib/auth";
-import {filterModUnverifiedVersions} from "@/lib/mods";
+import {filterModUnverifiedVersions, prepareModVersion} from "@/lib/mods";
 
 export async function GET(request: Request) {
     const { user } = await authorize(request);
@@ -33,6 +33,8 @@ export async function GET(request: Request) {
     for (const mod of mods) {
         const showUnverified = user && (user.role === 'ADMIN' || user.id === mod.uploaderId);
         if (!showUnverified) filterModUnverifiedVersions(mod);
+
+        mod.latestVersion = mod.latestVersion ? prepareModVersion(mod.latestVersion) : null;
     }
 
     return Response.json(mods);

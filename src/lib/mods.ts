@@ -6,8 +6,8 @@ export function filterModUnverifiedVersions<TInner extends { verified: boolean }
     val.versions = val.versions.filter(v => v.verified);
 }
 
-export function prepareModVersion<T extends { cdnContentPath: string }>(val: T): T & { cdnContentUrl: string } {
-    return { ...val, cdnContentUrl: prepareUrl(val.cdnContentPath) };
+export function prepareModVersion<T extends { cdnContentPath: string, cdnIconPath: string | null }>(val: T): T & { cdnContentUrl: string, cdnIconUrl: string | null } {
+    return { ...val, cdnContentUrl: prepareUrl(val.cdnContentPath), cdnIconUrl: val.cdnIconPath ? prepareUrl(val.cdnIconPath) : null };
 }
 
 export function parseVersion(version: string) {

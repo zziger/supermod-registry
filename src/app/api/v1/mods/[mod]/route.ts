@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import {filterModUnverifiedVersions} from "@/lib/mods";
+import {filterModUnverifiedVersions, prepareModVersion} from "@/lib/mods";
 import {authorize} from "@/lib/auth";
 
 export async function GET(request: Request, { params }: { params: { mod: string } }) {
@@ -34,6 +34,8 @@ export async function GET(request: Request, { params }: { params: { mod: string 
     if (!mod.versions) {
         return new Response(null, { status: 404 });
     }
+
+    mod.latestVersion = mod.latestVersion ? prepareModVersion(mod.latestVersion) : null;
 
     return Response.json(mod);
 }
