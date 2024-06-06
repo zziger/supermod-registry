@@ -14,7 +14,7 @@ declare global {
     var authRequests: Record<string, IAuthRequest>;
 }
 
-const requestTtl = 900;
+const requestTtl = 15 * 60 * 1000;
 globalThis.authRequests = globalThis.authRequests ?? ({} as Record<string, IAuthRequest>)
 const authRequests: Record<string, IAuthRequest> = globalThis.authRequests;
 
@@ -136,7 +136,7 @@ export async function authorizeWithDiscord(code: string, state: string) {
     }
 
     const tokenValue = randomUUID();
-    const ttl = 3 * 86400; // 3 days
+    const ttl = 3 * 86400 * 1000; // 3 days
 
     await prisma.token.create({
         data: {
