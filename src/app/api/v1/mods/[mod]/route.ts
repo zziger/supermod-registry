@@ -51,6 +51,8 @@ export async function DELETE(request: Request, { params }: { params: { mod: stri
 
     await prisma.modVersion.deleteMany({ where: { modId: params.mod } });
     await prisma.mod.delete({ where: { id: params.mod } });
+    
+    return Response.json(true);
 }
 
 export async function PATCH(request: Request, { params }: { params: { mod: string } }) {
@@ -66,4 +68,6 @@ export async function PATCH(request: Request, { params }: { params: { mod: strin
         where: { id: params.mod },
         data: { uploaderId }
     });
+
+    return Response.json(true);
 }
