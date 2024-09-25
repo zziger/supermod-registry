@@ -13,7 +13,7 @@ const manifestScheme = z.object({
     id: z.string().min(2).max(32).regex(/^[a-zA-Z0-9_-]{2,32}$/),
     title: z.string().optional(),
     author: z.string().optional(),
-    version: z.string().refine((val) => semver.valid(parseVersion(val))),
+    version: z.string().optional().refine((val) => !val || semver.valid(parseVersion(val))),
     sdkVersion: z.string().optional(),
     description: z.string().optional(),
     gameVersions: z.array(z.number()).optional(),
@@ -40,14 +40,17 @@ export async function POST(request: Request) {
         return new Response(null, { status: 403 });
     }
 
+    const parsedVersion = parseVersion(parsedData.version || '0.0.0')!;
+    const parsedVersionStr = parsedVersion.toString();
+
     const existingVersion = await prisma.modVersion.findFirst({
-       where: { modId, version: parsedData.version }
+       where: { modId, version: parsedVersionStr }
     });
     if (existingVersion) {
         return new Response(null, { status: 409 });
     }
 
-    const cdnRootPath = `mods/${modId}/${parsedData.version}`;
+    const cdnRootPath = `mods/${modId}/${parsedVersionStr}`;
     const cdnContentPath = `${cdnRootPath}/content.zip`;
     let cdnIconPath: string | null = null;
 
@@ -86,8 +89,9 @@ export async function POST(request: Request) {
             modId,
             ...parsedData,
             cdnContentPath,
+            version: parsedVersionStr,
             cdnIconPath,
-            prerelease: !!semver.prerelease(parseVersion(parsedData.version)!),
+            prerelease: !!semver.prerelease(parsedVersion),
             verified,
         },
         include: {
