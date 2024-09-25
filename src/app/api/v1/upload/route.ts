@@ -55,7 +55,8 @@ export async function POST(request: Request) {
     await client.send(new PutObjectCommand({
         Bucket: env.R2_BUCKET,
         Key: `${cdnRootPath}/content.zip`,
-        ContentType: 'application/zip'
+        ContentType: 'application/zip',
+        Body: Buffer.from(content)
     }));
 
     const iconEntry = zip.getEntry("icon.png");
